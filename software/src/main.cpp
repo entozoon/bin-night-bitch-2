@@ -21,10 +21,12 @@
 // //
 // void setup()
 // {
+//   Serial.begin(115200);
 //   delay(4000);
 //   pinMode(7, OUTPUT); // 7 = D7
 //   pinMode(8, OUTPUT);
-//   pinMode(9, OUTPUT);
+//   pinMode(A0, INPUT_PULLUP);
+//   pinMode(A1, INPUT_PULLUP);
 // }
 // void loop()
 // {
@@ -36,6 +38,9 @@
 //   digitalWrite(8, 0);
 //   digitalWrite(9, 0);
 //   delay(1000);
+//   Serial.println(digitalRead(A0));
+//   Serial.println(digitalRead(A1));
+//   Serial.println("");
 // }
 //
 //
@@ -45,8 +50,8 @@
 #include <Adafruit_ST7789.h> // Hardware-specific library for ST7789
 #include <SPI.h>             // Arduino SPI library#include <Adafruit_GFX.h>    // Core graphics library
 #define CS 9                 // D9    (unused)
-#define DC 8                 // D8
-#define RST 7                // D7
+#define DC 7                 // D8
+#define RST 8                // D7
 // #define SDA A4 // (built-in)
 // #define SCK A5 // (built-in SCL)
 Adafruit_ST7789 tft = Adafruit_ST7789(CS, DC, RST); // hardware SPI
@@ -314,3 +319,169 @@ void loop()
   tft.invertDisplay(false);
   delay(500);
 }
+//
+// //
+// // RTC SET (using serial monitor input)
+// //
+// #include <DS3231.h>
+// #include <Wire.h>
+// DS3231 clock;
+// byte year;
+// byte month;
+// byte date;
+// byte dow;
+// byte hour;
+// byte minute;
+// byte second;
+// bool century = false;
+// bool h12Flag;
+// bool pmFlag;
+// void inputDateFromSerial()
+// {
+//   boolean isStrComplete = false;
+//   char inputChar;
+//   byte temp1, temp2;
+//   char inputStr[20];
+//   uint8_t currentPos = 0;
+//   while (!isStrComplete)
+//   {
+//     if (Serial.available())
+//     {
+//       inputChar = Serial.read();
+//       inputStr[currentPos] = inputChar;
+//       currentPos += 1;
+//       // Check if string complete (end with "x")
+//       if (inputChar == 'x')
+//       {
+//         isStrComplete = true;
+//       }
+//     }
+//   }
+//   Serial.println(inputStr);
+//   // Find the end of char "x"
+//   int posX = -1;
+//   for (uint8_t i = 0; i < 20; i++)
+//   {
+//     if (inputStr[i] == 'x')
+//     {
+//       posX = i;
+//       break;
+//     }
+//   }
+//   // Consider 0 character in ASCII
+//   uint8_t zeroAscii = '0';
+//   // Read Year first
+//   temp1 = (byte)inputStr[posX - 13] - zeroAscii;
+//   temp2 = (byte)inputStr[posX - 12] - zeroAscii;
+//   year = temp1 * 10 + temp2;
+//   // now month
+//   temp1 = (byte)inputStr[posX - 11] - zeroAscii;
+//   temp2 = (byte)inputStr[posX - 10] - zeroAscii;
+//   month = temp1 * 10 + temp2;
+//   // now date
+//   temp1 = (byte)inputStr[posX - 9] - zeroAscii;
+//   temp2 = (byte)inputStr[posX - 8] - zeroAscii;
+//   date = temp1 * 10 + temp2;
+//   // now Day of Week
+//   dow = (byte)inputStr[posX - 7] - zeroAscii;
+//   // now Hour
+//   temp1 = (byte)inputStr[posX - 6] - zeroAscii;
+//   temp2 = (byte)inputStr[posX - 5] - zeroAscii;
+//   hour = temp1 * 10 + temp2;
+//   // now Minute
+//   temp1 = (byte)inputStr[posX - 4] - zeroAscii;
+//   temp2 = (byte)inputStr[posX - 3] - zeroAscii;
+//   minute = temp1 * 10 + temp2;
+//   // now Second
+//   temp1 = (byte)inputStr[posX - 2] - zeroAscii;
+//   temp2 = (byte)inputStr[posX - 1] - zeroAscii;
+//   second = temp1 * 10 + temp2;
+// }
+// void setup()
+// {
+//   // Start the serial port
+//   Serial.begin(115200);
+//   // Start the I2C interface
+//   Wire.begin();
+//   // Request the time correction on the Serial
+//   delay(4000);
+//   Serial.println("Format YYMMDDwhhmmssx");
+//   Serial.println("Where YY = Year (ex. 20 for 2020)");
+//   Serial.println("      MM = Month (ex. 04 for April)");
+//   Serial.println("      DD = Day of month (ex. 09 for 9th)");
+//   Serial.println("      w  = Day of week from 1 to 7, 1 = Sunday (ex. 5 for Thursday)");
+//   Serial.println("      hh = hours in 24h format (ex. 09 for 9AM or 21 for 9PM)");
+//   Serial.println("      mm = minutes (ex. 02)");
+//   Serial.println("      ss = seconds (ex. 42)");
+//   Serial.println("Example for input : 2004095090242x");
+//   Serial.println("-----------------------------------------------------------------------------");
+//   Serial.println("Please enter the current time to set on DS3231 ended by 'x':");
+// }
+// void loop()
+// {
+//   if (Serial.available())
+//   {
+//     inputDateFromSerial();
+//     clock.setClockMode(false); // set to 24h
+//     clock.setYear(year);
+//     clock.setMonth(month);
+//     clock.setDate(date);
+//     clock.setDoW(dow);
+//     clock.setHour(hour);
+//     clock.setMinute(minute);
+//     clock.setSecond(second);
+//     // Give time at next five seconds
+//     for (uint8_t i = 0; i < 5; i++)
+//     {
+//       delay(1000);
+//       Serial.print(clock.getYear(), DEC);
+//       Serial.print("-");
+//       Serial.print(clock.getMonth(century), DEC);
+//       Serial.print("-");
+//       Serial.print(clock.getDate(), DEC);
+//       Serial.print(" ");
+//       Serial.print(clock.getHour(h12Flag, pmFlag), DEC); //24-hr
+//       Serial.print(":");
+//       Serial.print(clock.getMinute(), DEC);
+//       Serial.print(":");
+//       Serial.println(clock.getSecond(), DEC);
+//     }
+//     // Notify that we are ready for the next input
+//     Serial.println("Please enter the current time to set on DS3231 ended by 'x':");
+//   }
+//   delay(1000);
+// }
+//
+// //
+// // RTC READ
+// //
+// #include <DS3231.h>
+// #include <Wire.h>
+// DS3231 clock;
+// bool century = false;
+// bool h12Flag;
+// bool pmFlag;
+// void setup()
+// {
+//   // Start the serial port
+//   Serial.begin(115200);
+//   delay(4000);
+//   // Start the I2C interface
+//   Wire.begin();
+// }
+// void loop()
+// {
+//   delay(1000);
+//   Serial.print("20");
+//   Serial.print(clock.getYear(), DEC);
+//   Serial.print("-");
+//   Serial.print(clock.getMonth(century), DEC);
+//   Serial.print("-");
+//   Serial.print(clock.getDate(), DEC);
+//   Serial.print(" ");
+//   Serial.print(clock.getHour(h12Flag, pmFlag), DEC); //24-hr
+//   Serial.print(":");
+//   Serial.print(clock.getMinute(), DEC);
+//   Serial.print(":");
+//   Serial.println(clock.getSecond(), DEC);
+// }

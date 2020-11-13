@@ -1,0 +1,8 @@
+Partlist exported from //mac/Home/www/bin-night-bitch-2/hardware/schematic.sch at 12/11/2020 22:00
+
+Qty Value                               Device                              Package                      Parts  Description                          PROD_ID   
+1   DS2321-RTC                          DS2321-RTC                          DS2321-RTC                   U$2                                                   
+1   GMT130-1.3-OLED                     GMT130-1.3-OLED                     GMT130-1.3-OLED              U$1                                                   
+1   JST-XH-02-PIN-LONG-PAD              JST-XH-02-PIN-LONG-PAD              JST-XH-02-PACKAGE-LONG-PAD   X1     JST XH Connector 2 Pin                         
+2   MOMENTARY-SWITCH-SPST-SMD-4.6X2.8MM MOMENTARY-SWITCH-SPST-SMD-4.6X2.8MM TACTILE_SWITCH_SMD_4.6X2.8MM S1, S2 Momentary Switch (Pushbutton) - SPST SWCH-13065
+1   NANO_FOOTPRINT                      NANO_FOOTPRINT                      NANO                         J1     Generic Nano Footprint                         
