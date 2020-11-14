@@ -51,6 +51,9 @@ String getDateTimeString()
 }
 bool isBinTime()
 {
+  // This needs to be either
+  // day before bin day after 5pm
+  // day of bin day before midday
   if (clock.getDoW() == 6)
   {
     return true;
