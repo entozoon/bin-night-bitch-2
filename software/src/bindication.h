@@ -10,6 +10,7 @@ void displayHeader()
   // tft.setCursor(0, 0);
   // tft.println("WK 1: GREEN  WK 2: GREEN");
   tft.setCursor(140, 0); // should be safe, faux right align
+  readRTC();
   tft.println(getDateTimeString());
   Serial.println(getDateTimeString());
 }
@@ -46,7 +47,8 @@ void displayBindication()
     }
   }
 }
-String binColours[] = {
+const int binColoursCount = 4;
+String binColours[binColoursCount] = {
     "Red",
     "Green",
     "Blue",

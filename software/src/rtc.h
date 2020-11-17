@@ -4,43 +4,54 @@ DS3231 clock;
 bool century = false;
 bool h12Flag;
 bool pmFlag;
-void setupRtc()
+int year = 0;
+int month = 0;
+int day = 0;
+int dow = 0; // 1(sun)-7
+int hour = 0;
+int min = 0;
+void readRTC()
 {
   Wire.begin();
+  year = clock.getYear();
+  month = clock.getMonth(century);
+  day = clock.getDate();
+  dow = clock.getDoW();
+  hour = clock.getHour(h12Flag, pmFlag);
+  min = clock.getMinute();
 }
-String days[] = {"Sun",
+String days[] = {"n/a",
+                 "Sun",
                  "Mon",
                  "Tue",
                  "Wed",
                  "Thu",
                  "Fri",
                  "Sat"};
-String DoWString(int index)
+String dowString(int index)
 {
   return days[index];
-}
-String getDoWString()
-{
-  return days[clock.getDoW()];
 }
 String getDateString()
 {
   String result = "";
-  result += getDoWString();
+  result += dowString(dow);
   result += " ";
-  result += clock.getDate();
+  result += day;
   result += "/";
-  result += clock.getMonth(century);
+  result += month;
   result += "/";
-  result += clock.getYear();
+  result += year;
   return result;
 }
 String getTimeString()
 {
   String result = "";
-  result += clock.getHour(h12Flag, pmFlag);
+  result += hour < 10 ? "0" : "";
+  result += hour;
   result += ":";
-  result += clock.getMinute();
+  result += min < 10 ? "0" : "";
+  result += min;
   // result += ":";
   // result += clock.getSecond();
   return result;
@@ -67,4 +78,15 @@ bool isBinTime()
 bool isEvening()
 {
   return (clock.getHour(h12Flag, pmFlag) > 12);
+}
+bool saveRTC()
+{
+  clock.setClockMode(false); // set to 24h
+  clock.setYear(year);
+  clock.setMonth(month);
+  clock.setDate(day);
+  clock.setDoW(dow);
+  clock.setHour(hour);
+  clock.setMinute(min);
+  clock.setSecond(0);
 }
