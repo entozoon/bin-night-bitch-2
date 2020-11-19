@@ -98,7 +98,7 @@ void displayBindication()
     //   tft.println("NIGHT");
     //   delay(5000);
     // }
-    if (isBinTime(binDow))
+    if (binTimeNew)
     {
       Serial.println(F("isBinTime baby!"));
       Serial.print(F("binColourRightNow: "));

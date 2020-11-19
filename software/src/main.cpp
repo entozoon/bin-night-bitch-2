@@ -14,7 +14,7 @@ void setup(void)
   tftSetup();
   displayLogo();
   setupButtons();
-  readRTC();
+  // readRTC(); // no need here, runs within bindication
   readEEPROM(); // do infrequently; has a lifespan
   delay(1000);
 }

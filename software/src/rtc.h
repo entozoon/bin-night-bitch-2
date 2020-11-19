@@ -63,6 +63,19 @@ void readRTC()
   _dow = clock.getDoW();
   _hour = clock.getHour(h12Flag, pmFlag);
   _min = clock.getMinute();
+  Serial.println(F("::readRTC"));
+  Serial.print(F("_year: "));
+  Serial.println(_year);
+  Serial.print(F("_month: "));
+  Serial.println(_month);
+  Serial.print(F("_day: "));
+  Serial.println(_day);
+  Serial.print(F("_dow: "));
+  Serial.println(_dow);
+  Serial.print(F("_hour: "));
+  Serial.println(_hour);
+  Serial.print(F("m_minin: "));
+  Serial.println(_min);
   // Serial.print("2021, 1, 18: ");
   // Serial.println(weekNumberSince(secondsSince9thNov2020(2021, 1, 18, random(0, 24), random(0, 59))));
   _weekNumber = weekNumberSince(secondsSince9thNov2020(_year + 2000, _month, _day, _hour, _min));
@@ -119,15 +132,16 @@ String getDateTimeString()
 bool isBinTime(byte binDow)
 {
   // needs readRTC() to have been run
+  Serial.println(F("Note: a lot of this stuff won't work if bin day were sunday"));
   return (
       // Day before bin day after 4pm
-      _dow == (binDow - 1 && clock.getHour(h12Flag, pmFlag) > 16) ||
+      (_dow == binDow - 1 && _hour >= 16) ||
       // Day of bin day before 11am
-      _dow == (binDow && clock.getHour(h12Flag, pmFlag) < 11));
+      (_dow == binDow && _hour < 11));
 }
 bool isEvening()
 {
-  return (clock.getHour(h12Flag, pmFlag) > 12);
+  return (_hour > 12);
 }
 int binColourRightNow(byte wk1, byte wk2)
 {
