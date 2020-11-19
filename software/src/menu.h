@@ -58,12 +58,12 @@ void drawSelections()
   drawSelection(dowString(binDow));
   drawSelection(binColours[wk1]);
   drawSelection(binColours[wk2]);
-  drawSelection((String)year);
-  drawSelection((String)month);
-  drawSelection((String)day);
-  drawSelection(dowString(dow));
-  drawSelection((String)hour);
-  drawSelection((String)min);
+  drawSelection((String)_year);
+  drawSelection((String)_month);
+  drawSelection((String)_day);
+  drawSelection(dowString(_dow));
+  drawSelection((String)_hour);
+  drawSelection((String)_min);
   drawSelection("SAVE");
 }
 void pressSelection(int index)
@@ -80,22 +80,22 @@ void pressSelection(int index)
     wk2 = (wk2 < binColoursCount - 1) ? wk2 + 1 : 0;
     break;
   case 3:
-    year = (year < 99) ? year + 1 : 20;
+    _year = (_year < 99) ? _year + 1 : 20;
     break;
   case 4:
-    month = (month < 12) ? month + 1 : 1;
+    _month = (_month < 12) ? _month + 1 : 1;
     break;
   case 5:
-    day = (day < 31) ? day + 1 : 1;
+    _day = (_day < 31) ? _day + 1 : 1;
     break;
   case 6:
-    dow = (dow < 7) ? dow + 1 : 1;
+    _dow = (_dow < 7) ? _dow + 1 : 1;
     break;
   case 7:
-    hour = (hour < 23) ? hour + 1 : 0;
+    _hour = (_hour < 23) ? _hour + 1 : 0;
     break;
   case 8:
-    min = (min < 59) ? min + 1 : 0;
+    _min = (_min < 59) ? _min + 1 : 0;
     break;
   case 9:
     saveEEPROM();
